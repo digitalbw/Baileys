@@ -682,6 +682,18 @@ WA uses an encrypted form of communication to send chat/app updates. This has be
   '123456@s.whatsapp.net')
   ```
 
+- Label a chat
+
+``` ts
+await sock.chatModify({
+    labelAssociationAction: { 
+        labeled: true, // 'false' to remove label
+        labelId: 2  // label id, 2 = 'New order'
+    }
+  },
+  '123456@s.whatsapp.net')
+```
+
 **Note:** if you mess up one of your updates, WA can log you out of all your devices and you'll have to log in again.
 
 ## Disappearing Messages

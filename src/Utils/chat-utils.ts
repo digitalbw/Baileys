@@ -606,6 +606,18 @@ export const chatModificationToAppPatch = (
 			apiVersion: 1,
 			operation: OP.SET,
 		}
+	} else if('label' in mod) {
+		patch = {
+			syncAction: {
+				labelAssociationAction: {
+					labeled: mod.label.labeled
+				}
+			},
+			index: ['label_jid', `${mod.label.id}`, jid],
+			type: 'regular_low',
+			apiVersion: 3,
+			operation: OP.SET,
+		}
 	} else {
 		throw new Boom('not supported')
 	}
