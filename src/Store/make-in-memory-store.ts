@@ -38,6 +38,7 @@ export default (
 	const groupMetadata: { [_: string]: GroupMetadata } = { }
 	const presences: { [id: string]: { [participant: string]: PresenceData } } = { }
 	const state: ConnectionState = { connection: 'close' }
+	const labels: { [id: string]: string[] } = { }
 
 	const assertMessageList = (jid: string) => {
 		if(!messages[jid]) {
@@ -241,6 +242,29 @@ export default (
 				}
 			}
 		})
+
+		ev.on('chats.label', ({ jid, label, labeled }) => {
+			if(!(jid in labels)) {
+				labels[jid] = []
+			}
+
+			const jidLabels = labels[jid]
+
+			if(labeled && !jidLabels.includes(label)) {
+				jidLabels.push(label)
+				jidLabels.sort((a, b) => +a - +b)
+			} else if(!labeled) {
+				const labelIndex = jidLabels.indexOf(label)
+
+				if(labelIndex !== -1) {
+					jidLabels.splice(labelIndex, 1)
+				}
+			}
+
+			if(jidLabels.length === 0) {
+				delete labels[jid]
+			}
+		})
 	}
 
 	const toJSON = () => ({
@@ -268,6 +292,7 @@ export default (
 		groupMetadata,
 		state,
 		presences,
+		labels,
 		bind,
 		/** loads messages from the store, if not found -- uses the legacy connection */
 		loadMessages: async(jid: string, count: number, cursor: WAMessageCursor) => {

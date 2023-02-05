@@ -26,6 +26,8 @@ export type BaileysEventMap = {
     'chats.update': ChatUpdate[]
     /** delete chats with given ID */
     'chats.delete': string[]
+    /** label chats */
+    'chats.label': { jid: string, label: string, labeled: boolean | null | undefined }
     /** presence of contact in a chat updated */
     'presence.update': { id: string, presences: { [participant: string]: PresenceData } }
 

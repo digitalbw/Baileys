@@ -743,6 +743,17 @@ export const processSyncAction = (
 		if(!isInitialSync) {
 			ev.emit('chats.delete', [id])
 		}
+	} else if(action?.labelAssociationAction) {
+		const labeled = action.labelAssociationAction.labeled
+		const { index: [type, label, jid] } = syncAction
+
+		if(type === 'label_jid') {
+			ev.emit('chats.label', {
+				jid,
+				label,
+				labeled
+			})
+		}
 	} else {
 		logger?.debug({ syncAction, id }, 'unprocessable update')
 	}
